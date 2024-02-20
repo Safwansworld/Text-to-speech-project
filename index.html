@@ -5,13 +5,92 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Text to Speech</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"> <!-- Font Awesome CSS -->
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: url('mic-background.jpg') no-repeat center center fixed;
+      background-size: cover;
+    }
+    h2 {
+      text-align: center;
+      margin-top: 50px;
+      background: linear-gradient(to right, #FF7F50, #FF1493);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    form {
+      max-width: 400px;
+      margin: 0 auto;
+      background: linear-gradient(to bottom right, #FF1493, #87CEEB);
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      position: relative;
+      overflow: hidden;
+      text-align: center; /* Center align children */
+    }
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: bold;
+      background: linear-gradient(to right, #20B2AA, #FF7F50);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    input[type="text"] {
+      width: calc(100% - 40px); /* Subtract padding and border from width */
+      padding: 10px;
+      margin-bottom: 20px;
+      border: none; /* Remove border */
+      border-radius: 5px;
+      box-sizing: border-box;
+      background: white;
+      color: black;
+    }
+    button[type="submit"] {
+      padding: 10px 20px; /* Adjust padding */
+      background: linear-gradient(to right, #f8f6f8, #161616) no-repeat center;
+      background-size: 100px 100px;
+      color: #fff;
+      border: width:0cap;
+      border-radius: 20px; /* Adjust border radius for shape */
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      box-sizing: border-box;
+      overflow: hidden;
+      display: inline-flex; /* Use flexbox */
+      align-items: center; /* Center vertically */
+      justify-content: center; /* Center horizontally */
+    }
+    button[type="submit"]:hover {
+      background: linear-gradient(to right, #242122, #fcfaf9) no-repeat center;
+      background-size: 100px 100px;
+    }
+    button[type="submit"]:focus {
+      outline: none;
+    }
+  </style>
 </head>
-<body>
+<body style="background-image: url('data:image/jpeg;base64,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');">
   <h2>Enter Text for Speech Synthesis</h2>
-  <form action="http://your_nodemcu_ip_address/" method="POST">
-    <label for="text">Enter text:</label><br>
-    <input type="text" id="text" name="text"><br><br>
-    <input type="submit" value="Submit">
+  <form action="http://192.168.0.222/" method="POST">
+    <label for="text">Enter text:</label>
+    <input type="text" id="text" name="text" placeholder="Type something...">
+    <button type="submit"><i class="fas fa-microphone-alt mic-icon"></i></button>
   </form>
+  <script>
+    document.getElementById('textForm').addEventListener('submit', function(event) {
+      event.preventDefault(); // Prevent form submission
+
+      // Get the text input value
+      var textValue = document.getElementById('text').value;
+
+      // Display an alert with the submitted text
+      alert('You submitted the text: ' + textValue);
+    });
+  </script>
 </body>
 </html>
